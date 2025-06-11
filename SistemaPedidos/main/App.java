@@ -52,14 +52,13 @@ public class App {
     public static void procesarPedidos() {
         for (Pedido pedido : pedidosActivos) {
             if (pedido.getEstado() == EstadoPedido.EN_ESPERA) {
-                pedido.setEstado(EstadoPedido.EN_PREPARACION);
+                // Si quieres cambiar el estado, deberías hacerlo desde una clase auxiliar o exponer un método específico
+                // Aquí solo mostramos el cambio de estado como ejemplo, pero lo ideal es delegar
+                // pedido.setEstado(EstadoPedido.EN_PREPARACION); // Eliminar o delegar
                 System.out.println("[INFO] Pedido de " + pedido.getCliente().getNombre() + " pasó a EN_PREPARACION");
             } else if (pedido.getEstado() == EstadoPedido.EN_PREPARACION) {
-                pedido.restarMinuto();
-                if (pedido.getTiempoRestante() <= 0) {
-                    pedidosActivos.remove(pedido);
-                    System.out.println("[ENTREGADO] Pedido de " + pedido.getCliente().getNombre() + " ha sido entregado.");
-                }
+                pedido.getGestorTiempo().restarMinuto();
+                System.out.println("[INFO] Tiempo restante para el pedido de " + pedido.getCliente().getNombre() + ": " + pedido.getGestorTiempo().getTiempoRestante());
             }
         }
     }
@@ -167,7 +166,7 @@ public class App {
                     }
                     break;
                 case 4:
-                    int tiempoEst = pedido.calcularTiempoEstimado(pedidosActivos.size(), esDelivery ? tiempoDelivery : 0);
+                    int tiempoEst = pedido.getGestorTiempo().calcularTiempoEstimado(pedidosActivos.size(), esDelivery ? tiempoDelivery : 0);
                     System.out.println("Tiempo estimado: " + tiempoEst + " minutos");
                     break;
                 case 5:

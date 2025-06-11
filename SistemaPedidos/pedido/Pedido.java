@@ -61,4 +61,24 @@ public class Pedido {
     public ProgramacionPedido getProgramacion() {
         return programacion;
     }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public MetodoPago getMetodoPago() {
+        return metodoPago;
+    }
+
+    public double procesarPago() {
+        double total = CalculadoraTotalPedido.calcularTotal(productos);
+        Pago pago = FabricaPago.crearPago(metodoPago, total);
+        return pago.procesar();
+    }
+
+
+
+    public void programarPara(Date fecha) {
+        this.programacion.programarPara(fecha);
+    }
 }
